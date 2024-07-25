@@ -12,3 +12,4 @@ build-frontend:
 start-backend:
 	@echo "Starting backend dev server..."
 	@cd $(BACKEND_DIR) && go run main.go &
+

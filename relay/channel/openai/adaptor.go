@@ -16,6 +16,7 @@ import (
 	"one-api/relay/channel/lingyiwanwu"
 	"one-api/relay/channel/minimax"
 	"one-api/relay/channel/moonshot"
+	vertex_openai "one-api/relay/channel/vertex-openai"
 	relaycommon "one-api/relay/common"
 	"one-api/relay/constant"
 	"strings"
@@ -53,6 +54,8 @@ func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 		url := info.BaseUrl
 		url = strings.Replace(url, "{model}", info.UpstreamModelName, -1)
 		return url, nil
+	case common.VertexOpenaiChannel.Type:
+		return vertex_openai.GetRequestURL(info)
 	default:
 		return relaycommon.GetFullRequestURL(info.BaseUrl, info.RequestURLPath, info.ChannelType), nil
 	}
@@ -62,6 +65,19 @@ func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Request, info *re
 	channel.SetupApiRequestHeader(info, c, req)
 	if info.ChannelType == common.AzureChannel.Type {
 		req.Header.Set("api-key", info.ApiKey)
+		return nil
+	}
+	if info.ChannelType == common.VertexOpenaiChannel.Type {
+		parts := strings.SplitN(info.ApiKey, "|", 2)
+		if len(parts) != 2 {
+			return fmt.Errorf("invalid api key: %s", info.ApiKey)
+		}
+		voucher := strings.TrimSpace(parts[1])
+		accessToken, err := vertex_openai.GetAccessToken(voucher)
+		if err != nil {
+			return err
+		}
+		req.Header.Set("Authorization", "Bearer "+accessToken)
 		return nil
 	}
 	if strings.HasPrefix(info.ApiKey, "rt-") && len(info.ApiKey) == 48 {
@@ -90,6 +106,13 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, info *relaycommon.RelayInfo, re
 	}
 	if info.ChannelType != common.OpenAIChannel.Type {
 		request.StreamOptions = nil
+	}
+	if info.ChannelType == common.VertexOpenaiChannel.Type {
+		model, err := vertex_openai.GetRedirectModel(info.UpstreamModelName)
+		if err != nil {
+			return nil, err
+		}
+		request.Model = model
 	}
 	return request, nil
 }
@@ -178,6 +201,8 @@ func (a *Adaptor) GetModelList() []string {
 		return minimax.ModelList
 	case common.DoubaoChannel.Type:
 		return doubao.ModelList
+	case common.VertexOpenaiChannel.Type:
+		return vertex_openai.GetModelList()
 	default:
 		return ModelList
 	}
@@ -195,6 +220,9 @@ func (a *Adaptor) GetChannelName() string {
 		return minimax.ChannelName
 	case common.DoubaoChannel.Type:
 		return doubao.ChannelName
+	case common.VertexOpenaiChannel.Type:
+		return vertex_openai.ChannelName
+
 	default:
 		return ChannelName
 	}

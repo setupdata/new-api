@@ -136,6 +136,14 @@ export const CHANNEL_OPTIONS = [
     textColor: 'black',
     label: 'Vertex Claude'
   },
+  {
+    key: 11001,
+    text: 'Vertex Openai',
+    value: 11001,
+    backgroundColor: 'rgb(203, 155, 122)',
+    textColor: 'black',
+    label: 'Vertex Openai'
+  },
   { key: 8, text: '自定义渠道', value: 8, color: 'pink', label: '自定义渠道' },
   {
     key: 22,

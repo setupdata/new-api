@@ -55,6 +55,8 @@ function type2secretPrompt(type) {
       return '按照如下格式输入：Ak|Sk|Region';
     case 10003:
       return '按如下格式输入：ProjectId|JsonContent'
+    case 11001:
+      return '按如下格式输入：ProjectId|JsonContent'
     default:
       return '请输入渠道对应的鉴权密钥';
   }

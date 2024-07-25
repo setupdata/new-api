@@ -64,6 +64,17 @@ func init() {
 			})
 		}
 	}
+	//for modelName := range vertex_openai.ModelIdMap {
+	//	openAIModels = append(openAIModels, dto.OpenAIModels{
+	//		Id:         modelName,
+	//		Object:     "model",
+	//		Created:    1626777600,
+	//		OwnedBy:    vertex_openai.ChannelName,
+	//		Permission: permission,
+	//		Root:       modelName,
+	//		Parent:     nil,
+	//	})
+	//}
 	for _, modelName := range ai360.ModelList {
 		openAIModels = append(openAIModels, dto.OpenAIModels{
 			Id:         modelName,

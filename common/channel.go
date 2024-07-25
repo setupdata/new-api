@@ -48,6 +48,8 @@ var (
 	ScholarAIChannel    = Channel{Type: 10001, BaseUrl: "https://api.scholarai.io"}
 	DoubaoChannel       = Channel{Type: 10002, BaseUrl: "https://ark.cn-beijing.volces.com"}
 	VertexClaudeChannel = Channel{Type: 10003, BaseUrl: ""}
+
+	VertexOpenaiChannel = Channel{Type: 11001, BaseUrl: ""}
 )
 
 var ChannelList = []Channel{
@@ -91,6 +93,8 @@ var ChannelList = []Channel{
 	ScholarAIChannel,
 	DoubaoChannel,
 	VertexClaudeChannel,
+
+	VertexOpenaiChannel,
 }
 
 var ChannelMap map[int]Channel

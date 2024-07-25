@@ -1,13 +1,14 @@
 module one-api
 
 // +heroku goVersion go1.18
-go 1.18
+go 1.22
 
 require (
 	github.com/anknown/ahocorasick v0.0.0-20190904063843-d75dbd5169c0
 	github.com/aws/aws-sdk-go-v2 v1.26.1
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.11
 	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.7.4
+	github.com/bytedance/gopkg v0.0.0-20220118071334-3db87571198b
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/gzip v0.0.6
 	github.com/gin-contrib/sessions v0.0.5
@@ -26,6 +27,8 @@ require (
 	github.com/stripe/stripe-go/v76 v76.21.0
 	golang.org/x/crypto v0.21.0
 	golang.org/x/image v0.15.0
+	golang.org/x/net v0.21.0
+	golang.org/x/oauth2 v0.21.0
 	gorm.io/driver/mysql v1.4.3
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/driver/sqlite v1.4.3
@@ -39,7 +42,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.5 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.5 // indirect
 	github.com/aws/smithy-go v1.20.2 // indirect
-	github.com/bytedance/gopkg v0.0.0-20220118071334-3db87571198b // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
@@ -76,8 +78,6 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0 // indirect
-	golang.org/x/net v0.21.0 // indirect
-	golang.org/x/oauth2 v0.21.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
