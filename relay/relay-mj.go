@@ -30,7 +30,14 @@ func RelayMidjourneyImage(c *gin.Context) {
 		})
 		return
 	}
-	resp, err := service.GetImageHttpClient().Get(midjourneyTask.ImageUrl)
+	httpClient, err := common.GetImageHttpClient()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "http_get_image_failed",
+		})
+		return
+	}
+	resp, err := httpClient.Get(midjourneyTask.ImageUrl)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "http_get_image_failed",
@@ -382,6 +389,8 @@ func RelayMidjourneySubmit(c *gin.Context, relayMode int) *dto.MidjourneyRespons
 		midjRequest.Action = constant.MjActionShorten
 	} else if relayMode == relayconstant.RelayModeMidjourneyBlend { //绘画任务，此类任务可重复
 		midjRequest.Action = constant.MjActionBlend
+	} else if relayMode == relayconstant.RelayModeMidjourneyUpload { //绘画任务，此类任务可重复
+		midjRequest.Action = constant.MjActionUpload
 	} else if midjRequest.TaskId != "" { //放大、变换任务，此类任务，如果重复且已有结果，远端api会直接返回最终结果
 		mjId := ""
 		if relayMode == relayconstant.RelayModeMidjourneyChange {
@@ -547,7 +556,7 @@ func RelayMidjourneySubmit(c *gin.Context, relayMode int) *dto.MidjourneyRespons
 		if err != nil {
 			common.SysError("get_channel_null: " + err.Error())
 		}
-		if channel.AutoBan != nil && *channel.AutoBan == 1 && common.AutomaticDisableChannelEnabled {
+		if channel.GetAutoBan() && common.AutomaticDisableChannelEnabled {
 			model.UpdateChannelStatusById(midjourneyTask.ChannelId, 2, "No available account instance")
 		}
 	}
@@ -580,7 +589,10 @@ func RelayMidjourneySubmit(c *gin.Context, relayMode int) *dto.MidjourneyRespons
 			responseBody = []byte(newBody)
 		}
 	}
-
+	if midjResponse.Code == 1 && midjRequest.Action == "UPLOAD" {
+		midjourneyTask.Progress = "100%"
+		midjourneyTask.Status = "SUCCESS"
+	}
 	err = midjourneyTask.Insert()
 	if err != nil {
 		return &dto.MidjourneyResponse{
@@ -594,7 +606,6 @@ func RelayMidjourneySubmit(c *gin.Context, relayMode int) *dto.MidjourneyRespons
 		newBody := strings.Replace(string(responseBody), `"code":22`, `"code":1`, -1)
 		responseBody = []byte(newBody)
 	}
-
 	//resp.Body = io.NopCloser(bytes.NewBuffer(responseBody))
 	bodyReader := io.NopCloser(bytes.NewBuffer(responseBody))
 

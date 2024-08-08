@@ -36,7 +36,7 @@ type RelayInfo struct {
 }
 
 func GenRelayInfo(c *gin.Context) (*RelayInfo, error) {
-	channelType := c.GetInt("channel")
+	channelType := c.GetInt("channel_type")
 	channelId := c.GetInt("channel_id")
 
 	tokenId := c.GetInt("token_id")
@@ -79,7 +79,7 @@ func GenRelayInfo(c *gin.Context) (*RelayInfo, error) {
 	if info.ChannelType == common.OpenAIChannel.Type || info.ChannelType == common.AnthropicChannel.Type ||
 		info.ChannelType == common.AwsChannel.Type || info.ChannelType == common.GeminiChannel.Type ||
 		info.ChannelType == common.CloudflareChannel.Type ||
-		info.ChannelType == common.VertexClaudeChannel.Type || info.ChannelType == common.ScholarAIChannel.Type ||
+		info.ChannelType == common.GcpClaudeChannel.Type || info.ChannelType == common.ScholarAIChannel.Type ||
 		info.ChannelType == common.VertexOpenaiChannel.Type {
 		info.SupportStreamOptions = true
 	}
@@ -123,7 +123,7 @@ type TaskRelayInfo struct {
 }
 
 func GenTaskRelayInfo(c *gin.Context) (*TaskRelayInfo, error) {
-	channelType := c.GetInt("channel")
+	channelType := c.GetInt("channel_type")
 	channelId := c.GetInt("channel_id")
 
 	tokenId := c.GetInt("token_id")

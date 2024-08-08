@@ -45,9 +45,9 @@ var (
 	JinaChannel           = Channel{Type: 38, BaseUrl: "https://api.jina.ai"}
 	CloudflareChannel     = Channel{Type: 39, BaseUrl: "https://api.cloudflare.com"}
 
-	ScholarAIChannel    = Channel{Type: 10001, BaseUrl: "https://api.scholarai.io"}
-	DoubaoChannel       = Channel{Type: 10002, BaseUrl: "https://ark.cn-beijing.volces.com"}
-	VertexClaudeChannel = Channel{Type: 10003, BaseUrl: ""}
+	ScholarAIChannel = Channel{Type: 10001, BaseUrl: "https://api.scholarai.io"}
+	DoubaoChannel    = Channel{Type: 10002, BaseUrl: "https://ark.cn-beijing.volces.com"}
+	GcpClaudeChannel = Channel{Type: 10003, BaseUrl: ""}
 
 	VertexOpenaiChannel = Channel{Type: 11001, BaseUrl: ""}
 )
@@ -92,7 +92,7 @@ var ChannelList = []Channel{
 
 	ScholarAIChannel,
 	DoubaoChannel,
-	VertexClaudeChannel,
+	GcpClaudeChannel,
 
 	VertexOpenaiChannel,
 }
