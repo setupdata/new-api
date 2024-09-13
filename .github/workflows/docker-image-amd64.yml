@@ -1,6 +1,9 @@
 name: Publish Docker image (amd64)
 
 on:
+  push:
+    tags:
+      - 'v*.*.*'  # 匹配类似 v1.0.0 的 tag
   workflow_dispatch:
     inputs:
       name:
@@ -19,13 +22,11 @@ jobs:
 
       - name: Save version info
         run: |
-          git describe --tags > VERSION 
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo ${GITHUB_REF#refs/tags/} > VERSION
+          else
+            git describe --tags > VERSION || echo $(git rev-parse --short HEAD) > VERSION
+          fi
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -39,7 +40,6 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            pengzhile/new-api
             ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker images
