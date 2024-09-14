@@ -3,12 +3,18 @@ name: Publish Docker image (amd64)
 on:
   push:
     tags:
-      - 'v*.*.*'  # 匹配类似 v1.0.0 的 tag
+      - 'v*.*'  # 匹配类似 v1.0 的 tag
   workflow_dispatch:
     inputs:
       name:
         description: 'reason'
         required: false
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  
 jobs:
   push_to_registries:
     name: Push Docker image to multiple registries
